@@ -1254,8 +1254,9 @@ The following commands are available when any of the
 are enabled.
 
 #### DUMP_TMC
-`DUMP_TMC STEPPER=<name>`: This command will read the TMC driver
-registers and report their values.
+`DUMP_TMC STEPPER=<name> [REGISTER=<name>]`: This command will read all TMC
+driver registers and report their values. If a REGISTER is provided, only
+the specified register will be dumped.
 
 #### INIT_TMC
 `INIT_TMC STEPPER=<name>`: This command will initialize the TMC
@@ -1271,13 +1272,16 @@ if StealthChop2 is used, the stepper must be held at standstill for >130ms so
 that the driver executes the AT#1 calibration.
 
 #### SET_TMC_FIELD
-`SET_TMC_FIELD STEPPER=<name> FIELD=<field> VALUE=<value>`: This will
-alter the value of the specified register field of the TMC driver.
+`SET_TMC_FIELD STEPPER=<name> FIELD=<field> VALUE=<value> VELOCITY=<value>`:
+This will alter the value of the specified register field of the TMC driver.
 This command is intended for low-level diagnostics and debugging only
 because changing the fields during run-time can lead to undesired and
 potentially dangerous behavior of your printer. Permanent changes
 should be made using the printer configuration file instead. No sanity
 checks are performed for the given values.
+A VELOCITY can also be specified instead of a VALUE. This velocity is
+converted to the 20bit TSTEP based value representation. Only use the VELOCITY
+argument for fields that represent velocities.
 
 ### [toolhead]
 
@@ -1343,6 +1347,20 @@ print.
 
 #### SDCARD_RESET_FILE
 `SDCARD_RESET_FILE`: Unload file and clear SD state.
+
+### [axis_twist_compensation]
+
+The following commands are available when the
+[axis_twist_compensation config
+section](Config_Reference.md#axis_twist_compensation) is enabled.
+
+#### AXIS_TWIST_COMPENSATION_CALIBRATE
+`AXIS_TWIST_COMPENSATION_CALIBRATE [N_POINTS=<value>]`: Initiates the X twist calibration
+wizard. `N_POINTS` specifies the number of points along the X axis to calibrate
+at and defaults to 3.
+
+#### AXIS_TWIST_COMPENSATION_CLEAR
+`AXIS_TWIST_COMPENSATION_CLEAR`: Clears the current compensation values.
 
 ### [z_thermal_adjust]
 
